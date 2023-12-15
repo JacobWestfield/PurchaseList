@@ -1,30 +1,68 @@
 import { StatusBar } from "expo-status-bar";
-import { Image, FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  ToastAndroid,
+} from "react-native";
 import InputField from "./src/components/inputField";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ListElement from "./src/components/element.jsx";
+import purchaseService from "./services/purchase.service.js";
+import { cats } from "./beerCats.js";
 
 export default function App() {
+  const [catIndex, setCatIndex] = useState(0);
   const [purchase, setPurchase] = useState();
   const [purchasesList, setPurchasesList] = useState([]);
+
+  useEffect(() => {
+    setCatIndex(Math.floor(Math.random() * 9));
+  }, []);
+
+  useEffect(() => {
+    async function loadList() {
+      try {
+        await purchaseService.get().then((data) => setPurchasesList(data));
+      } catch (error) {
+        ToastAndroid.show("Что-то пошло не так :(", ToastAndroid.SHORT);
+      }
+    }
+    loadList();
+  }, []);
 
   function setData(title) {
     if (!title.trim()) return;
     setPurchase(title);
   }
-  function makePurchase() {
+  async function makePurchase() {
     const newItem = new Object({ title: purchase, _id: Date.now() });
-    setPurchasesList((prev) => {
-      if (!prev) return;
-      return [...prev, newItem];
-    });
+    try {
+      await purchaseService.create(newItem);
+      setPurchasesList((prev) => {
+        if (!prev) return;
+        return [...prev, newItem];
+      });
+      ToastAndroid.show("Добавлено успешно", ToastAndroid.SHORT);
+    } catch (error) {
+      ToastAndroid.show("Что-то пошло не так :(", ToastAndroid.SHORT);
+    }
   }
-  function deletePurchase(id) {
-    setPurchasesList((prev) => prev.filter((item) => item._id !== id));
+  async function deletePurchase(id) {
+    if (!id) return;
+    try {
+      await purchaseService.delete(id);
+      setPurchasesList((prev) => prev.filter((item) => item._id !== id));
+      ToastAndroid.show("Удалено успешно", ToastAndroid.SHORT);
+    } catch (error) {
+      ToastAndroid.show("Что-то пошло не так :(", ToastAndroid.SHORT);
+    }
   }
 
   const image = {
-    uri: "https://crva.imgix.net/hero-images/cats-and-craft-beer.jpg?auto=compress%2Cformat&fit=crop&fm=webp&ixlib=php-3.1.0&q=80&v=1554820621",
+    uri: cats[catIndex],
   };
 
   return (
@@ -58,13 +96,13 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#13d168",
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#9ADE7B",
     alignItems: "center",
     justifyContent: "center",
   },
   item: {
-    fontSize: 40,
+    fontSize: 25,
     textAlign: "center",
   },
-  image: { height: 400, width: 400 },
+  image: { height: 200, width: 200 },
 });

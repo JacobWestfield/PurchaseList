@@ -1,7 +1,7 @@
 {
   "expo": {
     "backgroundColor": "#13d168",
-    "name": "PurchaseList",
+    "name": "Пивной кот",
     "slug": "PurchaseList",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#13d168"
+      "backgroundColor": "#9ADE7B"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -19,14 +19,15 @@
       "supportsTablet": true
     },
     "android": {
-      "backgroundColor": "#13d168",
+      "backgroundColor": "#9ADE7B",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#13d168"
-      }
+        "backgroundColor": "#9ADE7B"
+      },
+      "package": "com.nikman55.PurchaseList"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.png"
     },
     "extra": {
       "eas": {
