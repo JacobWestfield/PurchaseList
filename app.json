@@ -3,7 +3,8 @@
     "backgroundColor": "#13d168",
     "name": "Пивной кот",
     "slug": "PurchaseList",
-    "version": "1.0.0",
+    "owner": "nikman55",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -12,9 +13,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#9ADE7B"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },

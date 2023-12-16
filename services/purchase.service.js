@@ -8,6 +8,7 @@ const purchaseService = {
     return data.content;
   },
   create: async (payload) => {
+    if (!payload.title.trim()) throw new Error();
     const { data } = await httpService.put(endpoint + payload._id, payload);
     return data;
   },

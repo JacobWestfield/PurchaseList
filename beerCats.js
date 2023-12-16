@@ -7,4 +7,12 @@ export const cats = [
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7mWGrmhT_UD-qUTO5LxmC1BwoWs4r-zlx6ICMXX2kJysv7Pz85isBpuyRVP-L8bU3Mh4&usqp=CAU",
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbDHxL-5_hz4KGRuvsXSFHGGQqi0CsDEPV4mhof_fQtu6U923WDnxDpykMT3ptOMndT-A&usqp=CAU",
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSP3DGCbIUIYDQcS6SckMIRW-droFLz2dnLTNkeUt4gUWLBZmG36FTf4UoW6bDQxNeyrTM&usqp=CAU",
+  "https://vinepair.com/wp-content/uploads/2017/05/rosie-card.jpg",
+  "https://portland.thedrinknation.com/uploads/images/beercats/beer-cat-1.jpg",
+  "https://portland.thedrinknation.com/uploads/images/beercats/beer-cat-2.jpg",
+  "https://portland.thedrinknation.com/uploads/images/beercats/beer-cat-5.jpg",
+  "https://portland.thedrinknation.com/uploads/images/beercats/beer-cat-9.jpg",
+  "https://portland.thedrinknation.com/uploads/images/beercats/beer-cat-11.jpg",
+  "https://portland.thedrinknation.com/uploads/images/beercats/beer-cat-8.jpg",
+  "https://portland.thedrinknation.com/uploads/Riley_cat_drinking.JPG",
 ];
