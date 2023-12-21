@@ -1,5 +1,12 @@
 import React, { useRef, useEffect } from "react";
-import { Animated, Text, View, StyleSheet, Pressable } from "react-native";
+import {
+  Animated,
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  Dimensions,
+} from "react-native";
 
 const ListElement = ({ data, onDelete, id }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -51,35 +58,43 @@ const ListElement = ({ data, onDelete, id }) => {
   );
 };
 
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+
 const styles = StyleSheet.create({
   item: {
     flexWrap: "wrap",
-    fontSize: 25,
-    textAlign: "center",
-    marginBottom: 10,
-    marginRight: 50,
+    fontSize: 0.025 * windowHeight,
+    marginBottom: 0.01 * windowHeight,
+    alignSelf: "center",
+    width: 0.5 * windowWidth,
   },
   view: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingTop: 15,
-    paddingBottom: 10,
-    paddingHorizontal: 30,
+    paddingTop: 0.015 * windowHeight,
+    paddingBottom: 0.013 * windowHeight,
+    paddingHorizontal: 0.05 * windowWidth,
     backgroundColor: "#EEF296",
     borderWidth: 2,
-    borderRadius: 50,
-    marginBottom: 10,
+    borderRadius: 0.06 * windowHeight,
+    marginTop: 0.01 * windowHeight,
+    width: 0.8 * windowWidth,
   },
   button: {
     backgroundColor: "#FF8F8F",
     borderRadius: 20,
+    borderWidth: 1,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 10,
+    paddingHorizontal: 0.05 * windowWidth,
     elevation: 3,
     shadowColor: "#000000",
+    height: 0.05 * windowHeight,
+    maxWidth: 0.25 * windowWidth,
+    alignSelf: "center",
   },
 });
 

@@ -9,14 +9,18 @@ import {
   Text,
   View,
   ToastAndroid,
+  Dimensions,
+  Pressable,
 } from "react-native";
 import InputField from "./src/components/inputField";
 import { useEffect, useState } from "react";
 import ListElement from "./src/components/element.jsx";
 import purchaseService from "./services/purchase.service.js";
 import { cats } from "./beerCats.js";
+import Loader from "./src/components/loader.jsx";
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
   const [catIndex, setCatIndex] = useState(0);
   const [purchase, setPurchase] = useState("");
   const [purchasesList, setPurchasesList] = useState([]);
@@ -25,16 +29,20 @@ export default function App() {
     setCatIndex(Math.floor(Math.random() * 17));
   }, []);
 
-  useEffect(() => {
-    async function loadList() {
-      try {
-        await purchaseService.get().then((data) => setPurchasesList(data));
-      } catch (error) {
-        Vibration.vibrate(100);
-        ToastAndroid.show("Что-то пошло не так :(", ToastAndroid.SHORT);
-      }
+  async function loadList() {
+    setLoading(true);
+    try {
+      await purchaseService.get().then((data) => setPurchasesList(data));
+      setLoading(false);
+    } catch (error) {
+      Vibration.vibrate(100);
+      ToastAndroid.show("Что-то пошло не так :(", ToastAndroid.SHORT);
+      setLoading(false);
     }
-    loadList();
+  }
+
+  useEffect(() => {
+    setTimeout(loadList, 3000);
   }, []);
 
   function setData(title) {
@@ -66,6 +74,7 @@ export default function App() {
       ToastAndroid.show("Что-то пошло не так :(", ToastAndroid.SHORT);
     }
   }
+
   async function deletePurchase(id) {
     if (!id) return;
     try {
@@ -77,12 +86,33 @@ export default function App() {
     }
   }
 
+  async function refreshList() {
+    setTimeout(loadList, 3000);
+  }
+
   const image = {
     uri: cats[catIndex],
   };
 
+  if (loading)
+    return (
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Loader />
+        <Text style={{ fontSize: 0.05 * windowHeight }}>Идёт загрузка...</Text>
+      </View>
+    );
+
   return (
     <View style={styles.container}>
+      <Pressable onPress={refreshList} style={styles.refreshButton}>
+        <Image source={require("./assets/refresh.png")} />
+      </Pressable>
       <Image source={image} style={styles.image}></Image>
       <InputField
         purchase={purchase}
@@ -106,11 +136,13 @@ export default function App() {
       ) : (
         <Text>Еще нет списка</Text>
       )}
-
       <StatusBar style="auto" />
     </View>
   );
 }
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 const styles = StyleSheet.create({
   container: {
@@ -125,8 +157,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   image: {
-    height: 350,
-    width: 350,
-    marginTop: 65,
+    height: 0.25 * windowHeight,
+    width: 0.25 * windowHeight,
+    marginTop: 0.05 * windowHeight,
+    borderRadius: 0.06 * windowHeight,
+  },
+  refreshButton: {
+    position: "absolute",
+    top: 0.03 * windowHeight,
+    right: 0,
+    height: 0.1 * windowHeight,
+    width: 0.2 * windowWidth,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

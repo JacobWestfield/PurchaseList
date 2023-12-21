@@ -6,6 +6,7 @@ import {
   TextInput,
   View,
   Pressable,
+  Dimensions,
 } from "react-native";
 
 const InputField = ({ onChange, onMakePurchase, purchase }) => {
@@ -26,25 +27,32 @@ const InputField = ({ onChange, onMakePurchase, purchase }) => {
 
 export default InputField;
 
+//Adaptive markup props
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+
 const styles = StyleSheet.create({
   input: {
-    fontSize: 20,
-    height: 60,
+    fontSize: 0.02 * windowHeight,
+    height: 0.06 * windowHeight,
     borderColor: "black",
     borderWidth: 2,
-    borderRadius: 50,
-    paddingHorizontal: 30,
-    marginBottom: 20,
+    borderRadius: 0.06 * windowHeight,
+    paddingHorizontal: 0.1 * windowWidth,
+    marginBottom: 0.01 * windowHeight,
+    width: 0.8 * windowWidth,
+    textAlign: "center",
   },
   button: {
     backgroundColor: "#508D69",
-    borderRadius: 50,
+    borderRadius: 0.06 * windowHeight,
     borderWidth: 2,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 15,
+    height: 0.06 * windowHeight,
     elevation: 10,
     shadowColor: "#000000",
+    width: 0.8 * windowWidth,
   },
 });
