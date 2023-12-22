@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import {
+  PixelRatio,
   Animated,
   Text,
   View,
@@ -57,10 +58,24 @@ const ListElement = ({ title, description, onDelete, id }) => {
     >
       <View style={styles.view}>
         <Pressable style={styles.item} onPress={showInfo}>
-          <Text>{title}</Text>
+          <Text
+            style={{
+              fontSize: FONT_MAIN,
+              maxWidth: 0.45 * windowWidth,
+            }}
+          >
+            {title}
+          </Text>
         </Pressable>
         <Pressable style={styles.button} onPress={fadeOut}>
-          <Text style={{ color: "#ffffff" }}>Удалить</Text>
+          <Text
+            style={{
+              color: "#ffffff",
+              fontSize: FONT_BUTTON,
+            }}
+          >
+            Удалить
+          </Text>
         </Pressable>
       </View>
     </Animated.View>
@@ -70,13 +85,20 @@ const ListElement = ({ title, description, onDelete, id }) => {
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
+let FONT_MAIN = 0.025 * windowHeight;
+let FONT_BUTTON = 0.015 * windowHeight;
+
+if (PixelRatio.getFontScale() > 1) {
+  FONT_MAIN = 0.015 * windowHeight;
+  FONT_BUTTON = 0.01 * windowHeight;
+}
+
 const styles = StyleSheet.create({
   item: {
     flexWrap: "wrap",
     fontSize: 0.025 * windowHeight,
     marginBottom: 0.01 * windowHeight,
     alignSelf: "center",
-    width: 0.5 * windowWidth,
   },
   view: {
     display: "flex",
@@ -89,7 +111,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 0.06 * windowHeight,
     marginTop: 0.01 * windowHeight,
-    width: 0.8 * windowWidth,
+    width: 0.9 * windowWidth,
   },
   button: {
     backgroundColor: "#FF8F8F",
@@ -98,7 +120,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 0.05 * windowWidth,
+    paddingHorizontal: 0.03 * windowWidth,
     height: 0.05 * windowHeight,
     maxWidth: 0.25 * windowWidth,
     alignSelf: "center",

@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import {
   Vibration,
+  PixelRatio,
   Alert,
   Keyboard,
   Image,
@@ -163,6 +164,12 @@ export default function App() {
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
+let FONT_MAIN = 0.015 * windowHeight;
+
+if (PixelRatio.getFontScale() > 1) {
+  FONT_MAIN = 0.01 * windowHeight;
+}
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#13d168",
@@ -194,5 +201,6 @@ const styles = StyleSheet.create({
   copyRight: {
     position: "absolute",
     bottom: 0,
+    fontSize: FONT_MAIN,
   },
 });
