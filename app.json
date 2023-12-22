@@ -4,7 +4,7 @@
     "name": "Пивной кот",
     "slug": "PurchaseList",
     "owner": "nikman55",
-    "version": "1.1.0",
+    "version": "1.1.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",

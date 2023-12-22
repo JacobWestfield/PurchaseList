@@ -6,9 +6,10 @@ import {
   StyleSheet,
   Pressable,
   Dimensions,
+  Alert,
 } from "react-native";
 
-const ListElement = ({ data, onDelete, id }) => {
+const ListElement = ({ title, description, onDelete, id }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   //Component fades in once being mounted
@@ -19,7 +20,7 @@ const ListElement = ({ data, onDelete, id }) => {
   const fadeInMounted = () => {
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 1500,
+      duration: 750,
       useNativeDriver: true,
     }).start();
   };
@@ -28,11 +29,11 @@ const ListElement = ({ data, onDelete, id }) => {
   const fadeOut = () => {
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 1000,
+      duration: 750,
       useNativeDriver: true,
     }).start();
-    setTimeout(() => onDelete(id), 900);
-    setTimeout(fadeIn, 1200);
+    setTimeout(() => onDelete(id, title), 700);
+    setTimeout(fadeIn, 900);
   };
   const fadeIn = () => {
     Animated.timing(fadeAnim, {
@@ -42,6 +43,12 @@ const ListElement = ({ data, onDelete, id }) => {
     }).start();
   };
 
+  function showInfo() {
+    Alert.alert(title, description, [
+      { text: "OK", onPress: () => console.log("OK Pressed") },
+    ]);
+  }
+
   return (
     <Animated.View
       style={{
@@ -49,7 +56,9 @@ const ListElement = ({ data, onDelete, id }) => {
       }}
     >
       <View style={styles.view}>
-        <Text style={styles.item}>{data}</Text>
+        <Pressable style={styles.item} onPress={showInfo}>
+          <Text>{title}</Text>
+        </Pressable>
         <Pressable style={styles.button} onPress={fadeOut}>
           <Text style={{ color: "#ffffff" }}>Удалить</Text>
         </Pressable>
@@ -90,8 +99,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 0.05 * windowWidth,
-    elevation: 3,
-    shadowColor: "#000000",
     height: 0.05 * windowHeight,
     maxWidth: 0.25 * windowWidth,
     alignSelf: "center",

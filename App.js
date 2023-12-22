@@ -12,11 +12,11 @@ import {
   Dimensions,
   Pressable,
 } from "react-native";
-import InputField from "./src/components/inputField";
+import InputField from "./src/components/inputField.jsx";
 import { useEffect, useState } from "react";
 import ListElement from "./src/components/element.jsx";
-import purchaseService from "./services/purchase.service.js";
-import { cats } from "./beerCats.js";
+import purchaseService from "./src/services/purchase.service.js";
+import { cats } from "./src/beerCats.js";
 import Loader from "./src/components/loader.jsx";
 
 export default function App() {
@@ -24,16 +24,21 @@ export default function App() {
   const [catIndex, setCatIndex] = useState(0);
   const [purchase, setPurchase] = useState("");
   const [purchasesList, setPurchasesList] = useState([]);
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
-    setCatIndex(Math.floor(Math.random() * 17));
+    setCatIndex(Math.floor((Math.random() * cats.length) | 0));
+  }, []);
+
+  useEffect(() => {
+    const currentList = purchasesList;
   }, []);
 
   async function loadList() {
     setLoading(true);
     try {
       await purchaseService.get().then((data) => setPurchasesList(data));
-      setLoading(false);
+      setTimeout(() => setLoading(false), 1800);
     } catch (error) {
       Vibration.vibrate(100);
       ToastAndroid.show("Что-то пошло не так :(", ToastAndroid.SHORT);
@@ -42,12 +47,16 @@ export default function App() {
   }
 
   useEffect(() => {
-    setTimeout(loadList, 3000);
+    loadList();
   }, []);
 
-  function setData(title) {
+  function setPurchaseData(title) {
     setPurchase(title);
   }
+  function setDescriptionData(description) {
+    setDescription(description);
+  }
+
   async function makePurchase() {
     if (!purchase.trim()) {
       Vibration.vibrate(100);
@@ -59,40 +68,44 @@ export default function App() {
       ]);
       setPurchase("");
     }
-    const newItem = new Object({ title: purchase.trim(), _id: Date.now() });
+    Keyboard.dismiss();
+    const newItem = new Object({
+      title: purchase.trim(),
+      description: description.trim(),
+      _id: Date.now(),
+    });
     try {
       await purchaseService.create(newItem);
       setPurchasesList((prev) => {
         if (!prev) return;
         return [...prev, newItem];
       });
-      Keyboard.dismiss();
+      ToastAndroid.show(`${purchase} - Добавлено успешно`, ToastAndroid.SHORT);
       setPurchase("");
-      ToastAndroid.show("Добавлено успешно", ToastAndroid.SHORT);
+      setDescription("");
     } catch (error) {
       Vibration.vibrate(100);
       ToastAndroid.show("Что-то пошло не так :(", ToastAndroid.SHORT);
     }
   }
 
-  async function deletePurchase(id) {
+  async function deletePurchase(id, title) {
     if (!id) return;
     try {
       await purchaseService.delete(id);
       setPurchasesList((prev) => prev.filter((item) => item._id !== id));
-      ToastAndroid.show("Удалено успешно", ToastAndroid.SHORT);
+      ToastAndroid.show(`${title} - Удалено успешно`, ToastAndroid.SHORT);
     } catch (error) {
       ToastAndroid.show("Что-то пошло не так :(", ToastAndroid.SHORT);
     }
   }
 
   async function refreshList() {
-    setTimeout(loadList, 3000);
+    setCatIndex(Math.floor((Math.random() * cats.length) | 0));
+    loadList();
   }
 
-  const image = {
-    uri: cats[catIndex],
-  };
+  const image = cats[catIndex];
 
   if (loading)
     return (
@@ -116,7 +129,9 @@ export default function App() {
       <Image source={image} style={styles.image}></Image>
       <InputField
         purchase={purchase}
-        onChange={setData}
+        description={description}
+        onChangePurchase={setPurchaseData}
+        onChangeDescription={setDescriptionData}
         onMakePurchase={makePurchase}
       />
       <Text style={styles.item}>Список покупок:</Text>
@@ -127,7 +142,8 @@ export default function App() {
             <ListElement
               id={item._id}
               onDelete={deletePurchase}
-              data={item.title}
+              title={item.title}
+              description={item.description}
             >
               {item.title}
             </ListElement>
@@ -137,6 +153,9 @@ export default function App() {
         <Text>Еще нет списка</Text>
       )}
       <StatusBar style="auto" />
+      <Text style={styles.copyRight}>
+        ©NikMan Solutions. "Пивной кот". v1.1.2
+      </Text>
     </View>
   );
 }
@@ -171,5 +190,9 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+  },
+  copyRight: {
+    position: "absolute",
+    bottom: 0,
   },
 });

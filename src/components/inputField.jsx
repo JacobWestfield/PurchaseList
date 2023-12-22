@@ -9,14 +9,26 @@ import {
   Dimensions,
 } from "react-native";
 
-const InputField = ({ onChange, onMakePurchase, purchase }) => {
+const InputField = ({
+  onChangePurchase,
+  onChangeDescription,
+  onMakePurchase,
+  purchase,
+  description,
+}) => {
   return (
     <View style={{ padding: 10 }}>
       <TextInput
         value={purchase}
         style={styles.input}
-        placeholder="Пиши тут чо надо купить"
-        onChangeText={(newText) => onChange(newText)}
+        placeholder="Добавить товар..."
+        onChangeText={(newText) => onChangePurchase(newText)}
+      />
+      <TextInput
+        value={description}
+        style={styles.input}
+        placeholder="Добавить описание..."
+        onChangeText={(newText) => onChangeDescription(newText)}
       />
       <Pressable color="#508D69" style={styles.button} onPress={onMakePurchase}>
         <Text style={{ fontSize: 20, color: "#FFFFFF" }}>Добавить</Text>
