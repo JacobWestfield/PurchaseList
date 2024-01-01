@@ -4,7 +4,7 @@
     "name": "Пивной кот",
     "slug": "PurchaseList",
     "owner": "nikman55",
-    "version": "1.1.2",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -32,6 +32,7 @@
       "eas": {
         "projectId": "bfca46e6-886a-4b96-ae80-bcda55a5dc6e"
       }
-    }
+    },
+    "plugins": ["expo-router"]
   }
 }

@@ -13,100 +13,51 @@ import {
   Dimensions,
   Pressable,
 } from "react-native";
-import InputField from "./src/components/inputField.jsx";
+import MainLayout from "./src/MainLayout.jsx";
+import RegisterLayout from "./src/RegisterLayout.jsx";
+import LoginLayout from "./src/LoginLayout.jsx";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-import ListElement from "./src/components/element.jsx";
-import purchaseService from "./src/services/purchase.service.js";
-import { cats } from "./src/beerCats.js";
 import Loader from "./src/components/loader.jsx";
 
 export default function App() {
+  const [currentGroup, setCurrentGroup] = useState("");
   const [loading, setLoading] = useState(true);
-  const [catIndex, setCatIndex] = useState(0);
-  const [purchase, setPurchase] = useState("");
-  const [purchasesList, setPurchasesList] = useState([]);
-  const [description, setDescription] = useState("");
+  const [registerRoute, setRegisterRoute] = useState(false);
 
   useEffect(() => {
-    setCatIndex(Math.floor((Math.random() * cats.length) | 0));
-  }, []);
-
-  useEffect(() => {
-    const currentList = purchasesList;
-  }, []);
-
-  async function loadList() {
-    setLoading(true);
-    try {
-      await purchaseService.get().then((data) => setPurchasesList(data));
-      setTimeout(() => setLoading(false), 1800);
-    } catch (error) {
-      Vibration.vibrate(100);
-      ToastAndroid.show("Что-то пошло не так :(", ToastAndroid.SHORT);
+    setTimeout(() => {
       setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    loadList();
+    }, 1500);
   }, []);
 
-  function setPurchaseData(title) {
-    setPurchase(title);
-  }
-  function setDescriptionData(description) {
-    setDescription(description);
+  function logOut() {
+    removeValue();
+    setCurrentGroup("");
   }
 
-  async function makePurchase() {
-    if (!purchase.trim()) {
-      Vibration.vibrate(100);
-      setTimeout(() => {
-        Vibration.vibrate(100);
-      }, 200);
-      Alert.alert("Где-то ошибка", "Поле добавления не должно быть пустым", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
-      setPurchase("");
-    }
-    Keyboard.dismiss();
-    const newItem = new Object({
-      title: purchase.trim(),
-      description: description.trim(),
-      _id: Date.now(),
-    });
+  removeValue = async () => {
     try {
-      await purchaseService.create(newItem);
-      setPurchasesList((prev) => {
-        if (!prev) return;
-        return [...prev, newItem];
-      });
-      ToastAndroid.show(`${purchase} - Добавлено успешно`, ToastAndroid.SHORT);
-      setPurchase("");
-      setDescription("");
-    } catch (error) {
+      await AsyncStorage.removeItem("currentGroup");
+    } catch (e) {
       Vibration.vibrate(100);
       ToastAndroid.show("Что-то пошло не так :(", ToastAndroid.SHORT);
     }
-  }
+  };
 
-  async function deletePurchase(id, title) {
-    if (!id) return;
+  const getCurrentGroup = async () => {
     try {
-      await purchaseService.delete(id);
-      setPurchasesList((prev) => prev.filter((item) => item._id !== id));
-      ToastAndroid.show(`${title} - Удалено успешно`, ToastAndroid.SHORT);
-    } catch (error) {
+      const jsonValue = await AsyncStorage.getItem("currentGroup");
+      if (jsonValue) setCurrentGroup(JSON.parse(jsonValue).groupName);
+    } catch (e) {
+      Vibration.vibrate(100);
       ToastAndroid.show("Что-то пошло не так :(", ToastAndroid.SHORT);
     }
-  }
+  };
 
-  async function refreshList() {
-    setCatIndex(Math.floor((Math.random() * cats.length) | 0));
-    loadList();
-  }
-
-  const image = cats[catIndex];
+  useEffect(() => {
+    getCurrentGroup();
+  }, []);
 
   if (loading)
     return (
@@ -124,38 +75,30 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={refreshList} style={styles.refreshButton}>
-        <Image source={require("./assets/refresh.png")} />
-      </Pressable>
-      <Image source={image} style={styles.image}></Image>
-      <InputField
-        purchase={purchase}
-        description={description}
-        onChangePurchase={setPurchaseData}
-        onChangeDescription={setDescriptionData}
-        onMakePurchase={makePurchase}
-      />
-      <Text style={styles.item}>Список покупок:</Text>
-      {purchasesList.length ? (
-        <FlatList
-          data={purchasesList}
-          renderItem={({ item }) => (
-            <ListElement
-              id={item._id}
-              onDelete={deletePurchase}
-              title={item.title}
-              description={item.description}
-            >
-              {item.title}
-            </ListElement>
-          )}
+      {currentGroup ? (
+        <Pressable onPress={logOut} style={styles.exitButton}>
+          <Image source={require("./assets/exit.png")} />
+        </Pressable>
+      ) : (
+        ""
+      )}
+
+      {currentGroup ? (
+        <MainLayout />
+      ) : registerRoute ? (
+        <RegisterLayout
+          onRouteChange={setRegisterRoute}
+          onGroupChange={setCurrentGroup}
         />
       ) : (
-        <Text>Еще нет списка</Text>
+        <LoginLayout
+          onGroupChange={setCurrentGroup}
+          onRouteChange={setRegisterRoute}
+        />
       )}
       <StatusBar style="auto" />
       <Text style={styles.copyRight}>
-        ©NikMan Solutions. "Пивной кот". v1.1.2
+        ©NikMan Solutions. "Пивной кот". v1.1.2 nikman.solutions@gmail.com
       </Text>
     </View>
   );
@@ -182,25 +125,27 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: "center",
   },
+  copyRight: {
+    position: "absolute",
+    bottom: 0.01 * windowHeight,
+    fontSize: 0.012 * windowHeight,
+    maxWidth: 0.9 * windowWidth,
+  },
   image: {
     height: 0.25 * windowHeight,
     width: 0.25 * windowHeight,
     marginTop: 0.05 * windowHeight,
     borderRadius: 0.06 * windowHeight,
   },
-  refreshButton: {
+  exitButton: {
     position: "absolute",
     top: 0.03 * windowHeight,
-    right: 0,
+    left: 0.05 * windowWidth,
     height: 0.1 * windowHeight,
     width: 0.2 * windowWidth,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-  },
-  copyRight: {
-    position: "absolute",
-    bottom: 0,
-    fontSize: FONT_MAIN,
+    zIndex: 100,
   },
 });

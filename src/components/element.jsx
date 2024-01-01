@@ -62,6 +62,7 @@ const ListElement = ({ title, description, onDelete, id }) => {
             style={{
               fontSize: FONT_MAIN,
               maxWidth: 0.45 * windowWidth,
+              textDecorationLine: "underline",
             }}
           >
             {title}

@@ -34,7 +34,7 @@ const InputField = ({
       <Pressable color="#508D69" style={styles.button} onPress={onMakePurchase}>
         <Text
           style={{
-            fontSize: FONT_BUTTON,
+            fontSize: FONT_MAIN,
             color: "#FFFFFF",
             maxWidth: 0.5 * windowWidth,
           }}
@@ -53,11 +53,9 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 let FONT_MAIN = 0.025 * windowHeight;
-let FONT_BUTTON = 0.015 * windowHeight;
 
 if (PixelRatio.getFontScale() > 1) {
   FONT_MAIN = 0.015 * windowHeight;
-  FONT_BUTTON = 0.01 * windowHeight;
 }
 
 const styles = StyleSheet.create({
