@@ -32,6 +32,7 @@ const LoginForm = ({
         onChangeText={(newText) => onChangeGroup(newText)}
       />
       <TextInput
+        secureTextEntry={true}
         value={password}
         style={styles.input}
         placeholder="Пароль..."

@@ -98,7 +98,7 @@ export default function App() {
       )}
       <StatusBar style="auto" />
       <Text style={styles.copyRight}>
-        ©NikMan Solutions. "Пивной кот". v1.1.2 nikman.solutions@gmail.com
+        ©NikMan Solutions. "Пивной кот". v1.2.1 nikman.solutions@gmail.com
       </Text>
     </View>
   );
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   exitButton: {
     position: "absolute",
     top: 0.03 * windowHeight,
-    left: 0.05 * windowWidth,
+    left: 0.02 * windowWidth,
     height: 0.1 * windowHeight,
     width: 0.2 * windowWidth,
     display: "flex",

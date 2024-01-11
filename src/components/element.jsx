@@ -10,8 +10,9 @@ import {
   Alert,
 } from "react-native";
 
-const ListElement = ({ title, description, onDelete, id }) => {
+const ListElement = ({ date, title, description, onDelete, id }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  date = date ? new Date(date) : null;
 
   //Component fades in once being mounted
   useEffect(() => {
@@ -45,9 +46,11 @@ const ListElement = ({ title, description, onDelete, id }) => {
   };
 
   function showInfo() {
-    Alert.alert(title, description, [
-      { text: "OK", onPress: () => console.log("OK Pressed") },
-    ]);
+    Alert.alert(
+      title + " - " + (date ? date.toLocaleDateString("ru-RU") : "Нет даты"),
+      description,
+      [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+    );
   }
 
   return (

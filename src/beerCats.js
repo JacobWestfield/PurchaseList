@@ -12,4 +12,13 @@ export const cats = [
   require("../assets/BeerCats/11.jpg"),
   require("../assets/BeerCats/12.jpg"),
   require("../assets/BeerCats/13.jpg"),
+  require("../assets/BeerCats/14.gif"),
+  require("../assets/BeerCats/15.gif"),
+  require("../assets/BeerCats/16.gif"),
+  require("../assets/BeerCats/17.gif"),
+  require("../assets/BeerCats/18.gif"),
+  require("../assets/BeerCats/19.gif"),
+  require("../assets/BeerCats/20.gif"),
+  require("../assets/BeerCats/21.gif"),
+  require("../assets/BeerCats/22.gif"),
 ];

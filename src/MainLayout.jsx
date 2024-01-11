@@ -89,6 +89,7 @@ export default function MainLayout() {
       description: description.trim(),
       group: currentGroup,
       _id: nanoid(),
+      date: Date.now(),
     });
     try {
       await purchaseService.create(newItem);
@@ -142,7 +143,7 @@ export default function MainLayout() {
       <Pressable onPress={refreshList} style={styles.refreshButton}>
         <Image source={require("../assets/refresh.png")} />
       </Pressable>
-      <Image source={image} style={styles.image}></Image>
+      <Image source={image} style={styles.image} />
       <Text style={styles.item}>{currentGroup}</Text>
       <InputField
         purchase={purchase}
@@ -157,6 +158,7 @@ export default function MainLayout() {
           data={purchasesList}
           renderItem={({ item }) => (
             <ListElement
+              date={item.date}
               id={item._id}
               onDelete={deletePurchase}
               title={item.title}
