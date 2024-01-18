@@ -1,3 +1,4 @@
+<img src="https://i.ebayimg.com/images/g/p7sAAOSwTRRkutdX/s-l1600.png" alt="beerCat png"/>
 <h1>Beer Cat </h1>
 <h2>Ваше новое полезное развлечение</h2>
 <hr />
